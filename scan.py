@@ -11,8 +11,8 @@ import datetime
 
 #return issues need to scan
 def get_issues():
-	jira = JIRA('http://jira.qudian.com/')
-	issues = jira.search_issues('issuetype = 业务需求 AND status = 待安全测试 AND assignee in (weichongfeng)')
+	jira = JIRA('http://jira.xxx.com/')
+	issues = jira.search_issues('xxx')
 	return issues
 
 #return target host
@@ -29,19 +29,19 @@ def get_host(issue):
 #return cookie string
 def get_cookie(issue):
 	issue = str(issue)
-	qd_security_account = '18515667715'
-	lfq_security_account = '4342719'
+	qd_security_account = 'xxx'
+	lfq_security_account = 'xxx'
 	hostname = issue.split('-')[0]
 	try:
-		if hostname == 'QD':
+		if hostname == 'xxx':
 			host = get_host(issue)
 			tag = re.findall(r"http://(\S\S\S\d)",host)[0]
-			login_url = 'http://'+tag+'.apitest.qufenqi.com/test/18515667715'
+			login_url = 'xxx'
 			r = requests.get(login_url,allow_redirects = False)
 			cookie = r.headers['Set-Cookie']
 
-		elif hostname == 'LFQ':
-			cookie_uri = 'http://lfqshop.apprd.test.qudian.com/test/login?id=' + lfq_security_account
+		elif hostname == 'xxx':
+			cookie_uri = 'xxx' + lfq_security_account
 			cookie_url = cookie_uri
 			r = requests.get(cookie_url)
 			cookie = r.headers['Set-Cookie']
@@ -58,7 +58,7 @@ def get_cookie(issue):
 def insert_db(jira_no,scan_id):
 	try:
 		now = str(datetime.datetime.now())
-		conn = MySQLdb.connect(host='localhost',port=3306,user='wei',passwd='hehe',db='arachni_test')
+		conn = MySQLdb.connect(host='localhost',port=3306,user='wei',passwd='xxx',db='arachni_test')
 		cur = conn.cursor()
 		sql = "insert into arachni (jira,scanid,start) values (%s,%s,%s);"
 		param = (jira_no,scan_id,now)
@@ -71,7 +71,7 @@ def insert_db(jira_no,scan_id):
 
 #return scan id
 def make_scan(issue,target):
-	arachni_host = 'http://121.199.30.51:7331/scans'
+	arachni_host = 'xxx'
 	cookie = get_cookie(issue)
 	host = get_host(issue)
 	print target
@@ -102,11 +102,11 @@ def make_scan(issue,target):
   		    "(?i-mx:name)" : "",
   		    "(?i-mx:user)" : "",
   		    "(?i-mx:usr)" : "",
-  		    "(?i-mx:pass)" : "5543!%",
+  		    "(?i-mx:pass)" : "xxx",
   		    "(?i-mx:txt)" : "",
   		    "(?i-mx:num)" : "",
   		    "(?i-mx:amount)" : "",
-  		    "(?i-mx:mail)" : "weichongfeng@qudian.com",
+  		    "(?i-mx:mail)" : "xxx",
   		    "(?i-mx:account)" : "",
   		    "(?i-mx:id)" : "1"
   		  },
@@ -145,7 +145,7 @@ def make_scan(issue,target):
 	return res['id'] #unicode type
 
 def change_jira(issue):
-	authed_jira = JIRA('http://jira.qudian.com/',basic_auth=('qudian_sec', 'Qudian_sec110'))
+	authed_jira = JIRA('http://jira.xxx.com/',basic_auth=('qudian_sec', 'xxx'))
 	authed_jira.assign_issue(issue, 'qudian_sec')
 
 
@@ -163,7 +163,7 @@ if __name__ == '__main__':
 
 			elif host !='host wrong!' and hostname == 'LFQ':
 				change_jira(i)
-				target == 'http://lfqshop.apprd.test.qudian.com/i/user'
+				target == 'xxx'
 				make_scan(i,target)
 			else:
 				pass
