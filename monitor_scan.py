@@ -13,13 +13,13 @@ from jira import JIRA
 import time
 
 def get_issues():
-	jira = JIRA('http://jira.qudian.com/')
-	issues = jira.search_issues('issuetype = 业务需求 AND status = 待安全测试 AND assignee in (qudian_sec)')
+	jira = JIRA('http://jira.xxx.com/')
+	issues = jira.search_issues('xxx')
 	return issues
 
 def get_scanid_by_jira(id):
 	try:
-		conn = MySQLdb.connect(host='localhost',port=3306,user='wei',passwd='hehe',db='arachni_test')
+		conn = MySQLdb.connect(host='localhost',port=3306,user='wei',passwd='xxx',db='arachni_test')
 		cur = conn.cursor()
 		sql = "select scanid from arachni where jira =%s;"
 		param = (id,)
@@ -34,14 +34,14 @@ def get_scanid_by_jira(id):
 		return 0
 
 def mail(a,b,c):
-	user = "weichongfeng@qudian.com"
- 	password = "Woshitiancai0323!"
-	to_list = ["sec@qudian.com"]
+	user = "xxx"
+ 	password = "xxx"
+	to_list = ["xxx"]
 	msg = a+'---'+b+'---'+c
 	message = MIMEText(msg, 'plain', 'utf-8')
 	message['Subject'] = Header('You have a syslog warn', 'utf-8')
-	message['From'] = Header('weichongfeng@qudian.com')
-	message['To'] = Header('sec@qudian.com')
+	message['From'] = Header('xxx')
+	message['To'] = Header('xxx')
 	try:
 		server = smtplib.SMTP("smtp.exmail.qq.com")
 		server.login(user,password)
@@ -53,7 +53,7 @@ def mail(a,b,c):
 def monitor_scan_summary(id):
 	scanid = get_scanid_by_jira(id)
 	if scanid:
-		r = requests.get('http://121.199.30.51:7331/scans/'+scanid[0][0]+'/report')
+		r = requests.get('xxx'+scanid[0][0]+'/report')
 		result = json.loads(r.text)
 		print id
 		for i in result['issues']:
@@ -69,7 +69,7 @@ def monitor_scan_summary(id):
 		print 'scanid wrong'
 
 def change_jira_done(issue):
-	authed_jira = JIRA('http://jira.qudian.com/',basic_auth=('qudian_sec', 'Qudian_sec110'))
+	authed_jira = JIRA('http://jira.xxx.com/',basic_auth=('qudian_sec', 'xxx'))
 	try:
 		authed_jira.transition_issue(issue,'121')
 		print 'Change jira done!'
@@ -81,7 +81,7 @@ def check_scan_done(id):
 	if scanid:
 		change_jira_done(id)
 		try:
-			r = requests.get('http://121.199.30.51:7331/scans/'+scanid[0][0])
+			r = requests.get('xxx'+scanid[0][0])
 			if json.loads(r.text)['status'] == 'done':
 				monitor_scan_summary(id)
 		except Exception,e:
