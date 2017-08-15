@@ -5,7 +5,7 @@ import MySQLdb
 import argparse
 
 def list_all_scan():
-	r = requests.get('http://121.199.30.51:7331/scans')
+	r = requests.get('xxx')
 	scanids = json.loads(r.text).keys()
 	for s in scanids:
 		jiraid = get_jira_by_scanid(s)
@@ -14,7 +14,7 @@ def list_all_scan():
 
 def get_scanid_by_jira(id):
 	try:
-		conn = MySQLdb.connect(host='localhost',port=3306,user='wei',passwd='hehe',db='arachni_test')
+		conn = MySQLdb.connect(host='localhost',port=3306,user='wei',passwd='xxx',db='arachni_test')
 		cur = conn.cursor()
 		sql = "select scanid from arachni where jira =%s;"
 		param = (id,)
@@ -30,7 +30,7 @@ def get_scanid_by_jira(id):
 
 def get_jira_by_scanid(scanid):
 	try:
-		conn = MySQLdb.connect(host='localhost',port=3306,user='wei',passwd='hehe',db='arachni_test')
+		conn = MySQLdb.connect(host='localhost',port=3306,user='wei',passwd='xxx',db='arachni_test')
 		cur = conn.cursor()
 		sql = "select jira from arachni where scanid =%s;"
 		param = (scanid,)
@@ -47,7 +47,7 @@ def get_jira_by_scanid(scanid):
 def check_scan_progress(id):
 	scanid = get_scanid_by_jira(id)
 	if scanid:
-		r = requests.get('http://121.199.30.51:7331/scans/'+scanid[0][0])
+		r = requests.get('xxx'+scanid[0][0])
 		print r.text
 		return 1
 	else:
@@ -56,7 +56,7 @@ def check_scan_progress(id):
 def show_scan_result(id):
 	scanid = get_scanid_by_jira(id)
 	if scanid:
-		r = requests.get('http://121.199.30.51:7331/scans/'+scanid[0][0]+'/report')
+		r = requests.get('xxx'+scanid[0][0]+'/report')
 		print r.text
 		return 1
 	else:
@@ -64,10 +64,10 @@ def show_scan_result(id):
 def show_scan_summary(id):
 	scanid = get_scanid_by_jira(id)
 	if scanid:
-		r1 = requests.get('http://121.199.30.51:7331/scans/'+scanid[0][0])
+		r1 = requests.get('xxx'+scanid[0][0])
 		status = json.loads(r1.text)['status']
 		print status
-		r = requests.get('http://121.199.30.51:7331/scans/'+scanid[0][0]+'/report')
+		r = requests.get('xxx'+scanid[0][0]+'/report')
 		result = json.loads(r.text)
 		print 'vuln:'+str(len(result['issues']))
 		for i in result['issues']:
@@ -81,7 +81,7 @@ def show_scan_summary(id):
 def pause_scan(id):
 	scanid = get_scanid_by_jira(id)
 	if scanid:
-		r = requests.put('http://121.199.30.51:7331/scans/'+scanid[0][0]+'/pause')
+		r = requests.put('xxx'+scanid[0][0]+'/pause')
 		print r.text
 		return 1
 	else:
@@ -90,7 +90,7 @@ def pause_scan(id):
 def resume_scan(id):
 	scanid = get_scanid_by_jira(id)
 	if scanid:
-		r = requests.put('http://121.199.30.51:7331/scans/'+scanid[0][0]+'/resume')
+		r = requests.put('xxx'+scanid[0][0]+'/resume')
 		print r.text
 		return 1
 	else:
@@ -99,7 +99,7 @@ def resume_scan(id):
 def abort_scan(id):
 	scanid = get_scanid_by_jira(id)
 	if scanid:
-		r = requests.delete('http://121.199.30.51:7331/scans/'+scanid[0][0])
+		r = requests.delete('xxx'+scanid[0][0])
 		print r.text
 		return 1
 	else:
